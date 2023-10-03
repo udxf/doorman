@@ -33,6 +33,19 @@ module.exports = async function (past, channel) {
 
 	const guild = channel.guildId
 
+	// prevent user limit bypass (see issue #2)
+	if (past.userLimit != channel.userLimit) {
+		const permissions = channel.permissionOverwrites
+		const closed = permissions.resolve(guild)?.deny.has('Connect')
+
+		// if the channel is full but open
+		// or the channel is free but closed
+		if (channel.full != closed) {
+			// toggle the channel state
+			permissions.edit(guild, { Connect: closed && null }).catch(()=>{})
+		}
+	}
+
 	past = prune(past)
 	channel = prune(channel)
 

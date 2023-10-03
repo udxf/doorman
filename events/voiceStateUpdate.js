@@ -32,6 +32,19 @@ module.exports = async function (past, state) {
 		&& await session.get(past.channelId))
 		past.channel?.delete().catch(() => null)
 
+	// Patch user limit bypass (see issue #2)
+	for (const ch of [channel, past.channel]) if (ch?.members.size) {
+		const permissions = ch.permissionOverwrites
+		const closed = permissions.resolve(guild.id)?.deny.has('Connect')
+
+		// if the channel is full but open
+		// or the channel is free but closed
+		if (ch.full != closed && await session.get(ch.id)) {
+			// toggle the channel state
+			permissions.edit(guild.id, { Connect: closed && null }).catch(()=>{})
+		}
+	}
+
 	if (!channel?.permissionsFor(this.user).has(0x1100410n)) return
 
 	const hub = await hubs.get(channel.id)
@@ -59,6 +72,19 @@ module.exports = async function (past, state) {
 			deny: BigInt(entry.deny || 0),
 			allow: BigInt(entry.allow || 0)
 		})
+	}
+
+	// Patch user limit bypass (see issue #2)
+	if (options.userLimit == 1) {
+		let perm = permissionOverwrites.find(o => o.id == guild.id)
+
+		if (perm) perm.deny += 0x100000n
+		else {
+			permissionOverwrites.push({
+				id: guild.id,
+				deny: 0x100000n
+			})
+		}
 	}
 
 	const room = await guild.channels.create({
