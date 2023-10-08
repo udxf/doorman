@@ -32,6 +32,8 @@ module.exports = async function (past, state) {
 		&& await session.get(past.channelId))
 		past.channel?.delete().catch(() => null)
 
+	if (past.channelId == state.channelId) return
+
 	// Patch user limit bypass (see issue #2)
 	for (const ch of [channel, past.channel]) if (ch?.members.size) {
 		const permissions = ch.permissionOverwrites
