@@ -7,6 +7,10 @@
 		"discord.js": "^14.7.1",
 		"mongodb": "^5.1.0"
 	},
+	"optionalDependencies": {
+		"bufferutil": "^4.0.7",
+		"utf-8-validate": "^6.0.3"
+	},
 	"engines": {
 		"node": ">=16.9.0"
 	}
