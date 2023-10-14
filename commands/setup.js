@@ -30,33 +30,30 @@ module.exports = {
 				embeds: lackingPermissions(permissions)
 			})
 
-		if (!channel)
+		if (!channel) {
 			channel = await this.guild.channels.create({
-				type: 2, // voice channel type,
+				type: 2, // voice
 				name: 'Voice Hub',
 				permissionOverwrites: [
 					{
-						// disables SEND_MESSAGES (0x800) permission for @everyone
+						// disable SEND_MESSAGES (0x800) permission for @everyone
 						id: this.guild.id,
 						deny: 0x800n
 					},
 					{
-						// enables MOVE_MEMBERS (0x1000000) permission for the bot
-						id: this.client.user.id,
+						// enable MOVE_MEMBERS (0x1000000) permission for the bot
+						id: this.applicationId,
 						allow: 0x1000000n
 					}
 				]
 			})
+		}
 		else channel.permissionOverwrites.edit(
 			this.guild.roles.everyone,
-			{
-				SendMessages: false
-			}
+			{ SendMessages: false }
 		)
 
-		await hubs.set(channel.id, {
-			guild: this.guildId
-		})
+		await hubs.set(channel.id, { guild: this.guildId })
 
 		this.reply({
 			ephemeral: true,
@@ -67,12 +64,12 @@ module.exports = {
 
 function lackingPermissions (permissions) {
 	const targets = [
-		[ 0x00000400n, "View Channels" ],
-		[ 0x00100000n, "Connect" ],
-		[ 0x00000010n, "Manage Channels" ],
-		[ 0x10000000n, "Manage Roles" ],
-		[ 0x01000000n, "Move Members" ],
-		[ 0x00000800n, "Send Messages" ]
+		[0x00000400n, "View Channels"],
+		[0x00100000n, "Connect"],
+		[0x00000010n, "Manage Channels"],
+		[0x10000000n, "Manage Roles"],
+		[0x01000000n, "Move Members"],
+		[0x00000800n, "Send Messages"]
 	]
 
 	const lacks = targets
