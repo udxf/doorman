@@ -4,7 +4,7 @@ const { hubs } = require('../util/database')
 module.exports = {
 	name: 'setup',
 	description: 'Make a voice hub that creates voice channels',
-	defaultMemberPermissions: 0x8n, // manage channels
+	defaultMemberPermissions: 0x8n,
 	dmPermission: false,
 
 	options: [
