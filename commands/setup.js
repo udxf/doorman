@@ -65,42 +65,22 @@ module.exports = {
 }
 
 function lackingPermissions (permissions) {
-	let embeds = new Array()
+	const targets = [
+		[ 0x00000400n, "View Channels" ],
+		[ 0x00100000n, "Connect" ],
+		[ 0x00000010n, "Manage Channels" ],
+		[ 0x10000000n, "Manage Roles" ],
+		[ 0x01000000n, "Move Members" ],
+		[ 0x00000800n, "Send Messages" ]
+	]
 
-	if (!permissions.has(['ViewChannel', 'Connect']))
-		embeds.push({
-			title: 'Bot is lacking access',
-			description: "Please grant the bot `View Channels` and `Connect` permissions. Other required permissions have no effect without these two.",
-			color: 0xed4245
-		})
+	const lacks = targets
+		.filter(([flag, name]) => !permissions.has(flag))
+		.map(([flag, name]) => `**${name}**`)
 
-	if (!permissions.has('ManageChannels'))
-		embeds.push({
-			title: "Bot can't manage channels",
-			description: "Without `Manage Channels` permission the bot can't create temporary voice channels for members. Please, grant the bot the permission and try again.",
-			color: 0xed4245
-		})
-
-	if (!permissions.has('ManageRoles'))
-		embeds.push({
-			title: "Bot can't manage channel permissions",
-			description: "Without `Manage Roles` permission the bot can't grant users access to their temporary voice channels. Please, grant the bot the permission and try again.",
-			color: 0xed4245
-		})
-
-	if (!permissions.has('MoveMembers'))
-		embeds.push({
-			title: "Bot can't move members",
-			description: "Without `Move Members` permission the bot can't move users to their temporary voice channels. Please, grant the bot the permission and try again.",
-			color: 0xed4245
-		})
-
-	if (!permissions.has('SendMessages'))
-		embeds.push({
-			title: "Bot can't send messages",
-			description: "Without `Send Messages` permission the bot can't properly pre-configure hubs. Please, grant the bot the permission and try again.",
-			color: 0xed4245
-		})
-
-	return embeds
+	return [{
+		color: 0xed4245,
+		title: "Missing permissions",
+		description: `Doorman lacks the ${lacks.join(', ').replace(/,([^,]*)$/, ' and$1')} permission${lacks.length > 1 ? 's' : ''}. Please provide the missing permission${lacks.length > 1 ? 's' : ''} and try again.`
+	}];
 }
