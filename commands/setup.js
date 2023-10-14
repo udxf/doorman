@@ -21,7 +21,8 @@ module.exports = {
 	 * @this {import('discord.js').Interaction}
 	 */
 	async execute (channel) {
-		const permissions = this.appPermissions
+		const permissions = channel?.permissionsFor(this.applicationId)
+			|| this.guild.members.me.permissions
 
 		if (!permissions.has(0x11100c10n))
 			return this.reply({
