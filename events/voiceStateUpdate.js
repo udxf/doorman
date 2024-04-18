@@ -125,15 +125,20 @@ module.exports = async function (past, state) {
 
 		// looks like the user is under 18yo. Retry with nsfw disabled
 
-		await room.setNSFW(false)
+		try {
 
-		state.setChannel(room).catch(async err => {
-			console.error(err)
+			await room.setNSFW(false)
+			await state.setChannel(room)
 
-			// nsfw isn't the cause. Revert actions
+			session.set(room.id, {
+				hub: channel.id,
+				host: member.id,
+				guild: guild.id
+			})
 
-			await room.setNSFW(true)
-			room.delete()
-		})
+		} catch (err) {
+			room.delete().catch(() => {})
+			console.log(err)
+		}
 	}
 }
