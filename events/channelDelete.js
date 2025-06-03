@@ -1,10 +1,10 @@
-const { hubs, session, history } = require('../util/database')
+import { hubs, session, history } from '../util/database.js'
 
 /**
  * @param {import('discord.js').NonThreadGuildBasedChannel} channel Deleted channel instance
  * @this import('discord.js').Client
  */
-module.exports = async function(channel) {
+export default async function(channel) {
   hubs.delete(channel.id)
   session.delete(channel.id)
   history.delete({ hub: channel.id })

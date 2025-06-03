@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+import { MongoClient } from 'mongodb'
 
 class MongoCollection {
 
@@ -71,8 +71,6 @@ const client = new MongoClient(process.env.DATABASE, {
 
 client.connect()
 
-module.exports = {
-  hubs: new MongoCollection(client, 'hubs'),
-  history: new MongoCollection(client, 'history'),
-  session: new MongoCollection(client, 'session')
-}
+export const hubs = new MongoCollection(client, 'hubs')
+export const history = new MongoCollection(client, 'history')
+export const session = new MongoCollection(client, 'session')

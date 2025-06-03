@@ -1,8 +1,12 @@
-const { ApplicationCommandOptionType: OptionType, ChannelType, Collection } = require('discord.js')
-const { hubs } = require('../util/database')
+import {
+  ApplicationCommandOptionType as OptionType,
+  ChannelType,
+  Collection
+} from 'discord.js'
+import { hubs } from '../util/database.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   name: 'configure',
   description: 'Configure default settings of temporary voice channels',
   options: [

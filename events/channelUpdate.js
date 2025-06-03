@@ -1,4 +1,4 @@
-const { session, history } = require('../util/database')
+import { session, history } from '../util/database.js'
 
 /**
  * Get rid of properties that don't need to be differed
@@ -22,7 +22,7 @@ function prune(channel) {
  * @param {import('discord.js').NonThreadGuildBasedChannel} channel Updated channel instance
  * @this import('discord.js').Client
  */
-module.exports = async function(past, channel) {
+export default async function(past, channel) {
 
   // return if it's not a voice channel
   if (channel.type != 2) return

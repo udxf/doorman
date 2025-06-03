@@ -1,8 +1,8 @@
-const { roleMention, userMention, EmbedBuilder } = require('discord.js')
-const { history, session } = require('../util/database')
+import { roleMention, userMention, EmbedBuilder } from 'discord.js'
+import { history, session } from '../util/database.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   name: 'revise',
   description: 'See who is allowed to join channel',
   dmPermission: false,

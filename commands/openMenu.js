@@ -1,6 +1,8 @@
+import open from './open.js'
+
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   type: 2,
   name: 'Open for User',
-  execute: require('./open').execute
+  execute: open.execute
 }

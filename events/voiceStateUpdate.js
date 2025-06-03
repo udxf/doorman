@@ -1,4 +1,4 @@
-const { hubs, history, session } = require('../util/database')
+import { hubs, history, session } from '../util/database.js'
 
 /**
  * Replaces `{tags}` in a channel name with their actual values
@@ -23,7 +23,7 @@ function resolve(name, { member }) {
  * @param {import('discord.js').VoiceState} state New voice state of member
  * @this import('discord.js').Client
  */
-module.exports = async function(past, state) {
+export default async function(past, state) {
   const { channel, guild, member } = state
 
   if (past.channel?.members.filter(m => !m.user.bot).size == 0

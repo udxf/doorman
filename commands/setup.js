@@ -1,7 +1,7 @@
-const { hubs } = require('../util/database')
+import { hubs } from '../util/database.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   name: 'setup',
   description: 'Make a voice hub that creates voice channels',
   defaultMemberPermissions: 0x8n,

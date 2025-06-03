@@ -2,7 +2,7 @@
  * @param {import('discord.js').Interaction} int Interaction instance
  * @this {import('discord.js').Client}
  */
-module.exports = async function(int) {
+export default async function(int) {
 
   if (!int.isCommand()) return
 

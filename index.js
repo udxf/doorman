@@ -1,21 +1,19 @@
-'use strict'
+import { readdirSync } from 'fs'
+import { Client, GatewayIntentBits } from 'discord.js'
 
-const
-  { readdirSync } = require('fs'),
-  { Client, GatewayIntentBits } = require('discord.js'),
-  client = new Client({
-    intents: [
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.Guilds
-    ],
-    shards: 'auto'
-  })
+const client = new Client({
+  intents: [
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.Guilds
+  ],
+  shards: 'auto'
+})
 
 client.commands = new Map()
 
 for (const file of readdirSync('commands'))
   if (file.endsWith('.js')) {
-    const command = require(`./commands/${file}`)
+    const command = (await import(`./commands/${file}`)).default
     client.commands.set(command.name, command)
   }
 
@@ -23,7 +21,7 @@ for (const file of readdirSync('events'))
   if (file.endsWith('.js'))
     client.on(
       file.split('.')[0],
-      require(`./events/${file}`).bind(client)
+      (await import(`./events/${file}`)).default.bind(client)
     )
 
 client.login(process.env.TOKEN)
@@ -39,7 +37,9 @@ client.login(process.env.TOKEN)
     client.application.commands.set([...client.commands.values()], process.env.GUILD)
   })
 
+import http from 'node:http';
+
 // HTTP health checks responder for some hosting platforms
-require('http')
+http
   .createServer((req, res) => res.end())
   .listen(process.env.PORT)

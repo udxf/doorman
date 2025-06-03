@@ -1,8 +1,8 @@
-const { history, session } = require('../util/database')
-const { Role } = require('discord.js')
+import { history, session } from '../util/database.js'
+import { Role } from 'discord.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   name: 'close',
   description: 'Prevent others from joining the channel',
   dmPermission: false,

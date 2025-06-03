@@ -1,6 +1,5 @@
-
 /** @type {import('discord.js').CommandInteraction} */
-module.exports = {
+export default {
   name: 'help',
   description: 'Get helpful information about the bot',
   dmPermission: false,

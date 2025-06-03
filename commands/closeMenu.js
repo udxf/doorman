@@ -1,6 +1,8 @@
+import close from './close.js'
+
 /** @type {import('discord.js').ApplicationCommand} */
-module.exports = {
+export default {
   type: 2,
   name: 'Close for User',
-  execute: require('./close').execute
+  execute: close.execute
 }
