@@ -11,17 +11,17 @@ export default {
     const adminHelp = [
       {
         title: 'Getting Started',
-        description: `First of all, lets make a hub! Hub is an entry point voice channel for making temporary voice channels. Use ${command('setup')} to create or specify a channel that will function as a hub for temporary voice channels.\n\nNow when you made a hub, you can ${command('configure')} it, specifying default settings for temporary voice channels. Keep in mind that it's just defaults, and users can change them for their temporary channels individually.`,
+        description: `First of all, lets make a hub! Hub is an entry point voice channel for making temporary voice channels. Use ${command('setup')} to create or specify a channel that will function as a hub for temporary voice channels.\n\nYou can specify default settings for temporary voice channels created by that specific hub. Keep in mind that it's just defaults, and users can change them for their temporary channels individually.`,
         color: 0x5865f2
       },
       {
         title: 'List of Commands',
-        description: `- ${command('help')} — Get help on how to use the bot\n- ${command('setup')} — Make a hub for temporary voice channels\n- ${command('configure')} — Specify default settings for temporary voice channels created using certain hub\n- ${command('close')} — Make your temporary voice channel invisible for everyone or somebody specific\n- ${command('open')} — Make your temporary voice channel open to everyone or somebody specific`,
+        description: `- ${command('help')} — Get help on how to use the bot\n- ${command('setup')} — Make a hub for temporary voice channels\n- ${command('close')} — Make your temporary voice channel invisible for everyone or somebody specific\n- ${command('open')} — Make your temporary voice channel open to everyone or somebody specific`,
         color: 0x5865f2
       },
       {
         title: 'About Hubs',
-        description: `Hubs are voice channels that redirect users to temporary voice channels. You can make multiple hubs using ${command('setup')}, and then ${command('configure')} default settings of temporary voice channels created by joining that specific hub.`,
+        description: `Hubs are voice channels that redirect users to temporary voice channels. You can make multiple hubs using ${command('setup')}, each with it's own default configuration for temporary voice channels created by joining that specific hub.`,
         color: 0x5865f2
       }
     ]
