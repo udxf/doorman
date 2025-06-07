@@ -65,8 +65,6 @@ class MongoCollection {
 const client = new MongoClient(process.env.DATABASE, {
   retryWrites: true,
   writeConcern: 'majority',
-  useNewUrlParser: true,
-  useUnifiedTopology: true
 })
 
 client.connect()
