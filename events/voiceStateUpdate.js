@@ -89,7 +89,7 @@ export default async function(past, state) {
     }
   }
 
-  const regions = await rest.get('/voice/regions')
+  const regions = await this.rest.get('/voice/regions')
 
   // Avoid unsupported RTC regions to prevent crashes (see issue #8)
   if (options.rtcRegion && !regions.find(i => i.id == options.rtcRegion)) {
