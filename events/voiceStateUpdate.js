@@ -11,8 +11,6 @@ function resolve(name, { member }) {
     ['user.id', member.id],
     ['user.name', member.displayName],
     ['user.username', member.user.username],
-    ['user.tag', member.user.tag],
-    ['user.discriminator', member.user.discriminator]
   ])
 
   return name.replace(/\{(.+)\}/g, (str, key) => vars.get(key) ?? str)
