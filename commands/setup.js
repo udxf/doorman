@@ -2,7 +2,8 @@ import {
   ApplicationCommandOptionType as OptionType,
   ChannelType,
   Collection,
-  REST
+  REST,
+  InteractionContextType
 } from 'discord.js'
 import { hubs } from '../util/database.js'
 
@@ -46,7 +47,7 @@ export default {
   name: 'setup',
   description: 'Setup a hub channel',
   defaultMemberPermissions: 0x8n,
-  dmPermission: false,
+  contexts: [InteractionContextType.Guild],
   options: [
     {
       type: OptionType.Channel,

@@ -1,11 +1,11 @@
-import { roleMention, userMention, EmbedBuilder } from 'discord.js'
+import { roleMention, userMention, EmbedBuilder, InteractionContextType } from 'discord.js'
 import { history, session } from '../util/database.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
 export default {
   name: 'revise',
   description: 'See who is allowed to join channel',
-  dmPermission: false,
+  contexts: [InteractionContextType.Guild],
 
   // TODO: maybe add an option to check someone else's channel
 

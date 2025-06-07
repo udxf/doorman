@@ -1,8 +1,10 @@
+import { InteractionContextType } from 'discord.js'
+
 /** @type {import('discord.js').CommandInteraction} */
 export default {
   name: 'help',
   description: 'Get helpful information about the bot',
-  dmPermission: false,
+  contexts: [InteractionContextType.Guild],
 
   async execute() {
     const commands = this.client.application.commands.cache

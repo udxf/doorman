@@ -1,11 +1,11 @@
 import { history, session } from '../util/database.js'
-import { Role } from 'discord.js'
+import { Role, InteractionContextType } from 'discord.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
 export default {
   name: 'open',
   description: 'Allow others to join the channel',
-  dmPermission: false,
+  contexts: [InteractionContextType.Guild],
 
   options: [{
     type: 9, // mentionable
