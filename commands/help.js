@@ -1,4 +1,4 @@
-import { InteractionContextType } from 'discord.js'
+import { InteractionContextType, MessageFlags } from 'discord.js'
 
 /** @type {import('discord.js').CommandInteraction} */
 export default {
@@ -53,7 +53,7 @@ export default {
     const localHelp = this.memberPermissions.has(0x8n) ? adminHelp : userHelp
 
     this.reply({
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
       embeds: [
         ...localHelp,
         {

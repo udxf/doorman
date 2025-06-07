@@ -1,4 +1,4 @@
-import { roleMention, userMention, EmbedBuilder, InteractionContextType } from 'discord.js'
+import { roleMention, userMention, EmbedBuilder, InteractionContextType, MessageFlags } from 'discord.js'
 import { history, session } from '../util/database.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
@@ -19,7 +19,7 @@ export default {
 
     if (!channel || !host)
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         content: 'Please join a temporary voice channel before using this command.'
       })
 
@@ -52,7 +52,7 @@ export default {
     if (!isPublic) embed.setFooter({ text: 'Note \u2014 Administrators always have full access!' })
 
     this.reply({
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
       embeds: [embed]
     })
   }

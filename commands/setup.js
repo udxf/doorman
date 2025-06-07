@@ -3,7 +3,8 @@ import {
   ChannelType,
   Collection,
   REST,
-  InteractionContextType
+  InteractionContextType,
+  MessageFlags
 } from 'discord.js'
 import { hubs } from '../util/database.js'
 
@@ -144,7 +145,7 @@ export default {
 
     if (!permissions.has(0x11100c10n)) {
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         embeds: lackingPermissions(permissions)
       })
     }
@@ -190,7 +191,7 @@ export default {
     ))
 
     this.reply({
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
       content: `Joining ${channel} now makes temporary voice channels with configuration you've specified by default. Users can edit their temporary voice channels, and their changes will be saved for them.`
     })
   }

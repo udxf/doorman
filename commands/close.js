@@ -1,5 +1,5 @@
 import { history, session } from '../util/database.js'
-import { Role, InteractionContextType } from 'discord.js'
+import { Role, InteractionContextType, MessageFlags } from 'discord.js'
 
 /** @type {import('discord.js').ApplicationCommand} */
 export default {
@@ -18,19 +18,19 @@ export default {
 
     if (target == this.member)
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         content: `You can't affect your own permissions.`
       })
 
     if (target == this.guild.members.me)
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         content: `You can't restrict me. It's required for me to have access to all personal voice channels to function properly.`
       })
 
     if (target.permissions?.has(0x8n))
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         content: `${target} has admin rights. Administrators always have full access to all channels.`
       })
 
@@ -39,7 +39,7 @@ export default {
 
     if (!channel || host != this.user.id)
       return this.reply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         content: 'You have to be in your own voice channel in order to use this command.'
       })
 
@@ -51,7 +51,7 @@ export default {
     })
 
     this.reply({
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
       content: `Now ${target == this.guild.roles.everyone ? 'nobody, except those whom you gave permission,' : target} can't join ${channel} and send messages there.`
     })
 
