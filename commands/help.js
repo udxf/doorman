@@ -16,12 +16,21 @@ export default {
       },
       {
         title: 'List of Commands',
-        description: `- ${command('help')} — Get help on how to use the bot\n- ${command('setup')} — Make a hub for temporary voice channels\n- ${command('close')} — Make your temporary voice channel invisible for everyone or somebody specific\n- ${command('open')} — Make your temporary voice channel open to everyone or somebody specific`,
+        description: `- ${command('help')} — Get help on how to use the bot\n- ${command('setup')} — Make a hub for temporary voice channels\n- ${command('close')} — Make your temporary voice channel invisible for everyone or somebody specific\n- ${command('open')} — Make your temporary voice channel open to everyone or somebody specific\n- ${command('revise')} — Check who is allowed to join channel you're currently in`,
         color: 0x5865f2
       },
       {
         title: 'About Hubs',
         description: `Hubs are voice channels that redirect users to temporary voice channels. You can make multiple hubs using ${command('setup')}, each with it's own default configuration for temporary voice channels created by joining that specific hub.`,
+        color: 0x5865f2
+      },
+      {
+        title: 'Templated Strings',
+        description: "If you name a channel as `Channel of {user.name}`, upon creation it'll be named `Channel of Wampus` (for example). Notice the `{user.name}` part - this is a **tag**, text pattern that gets replaced by some actual value.",
+        fields: [{
+          name: 'List of available tags',
+          value: "- `{user.id}` — The ID of the user.\n- `{user.name}` — The global display name of the user, or their username if they don't have one.\n- `{user.username}` — The username of the user."
+        }],
         color: 0x5865f2
       }
     ]
