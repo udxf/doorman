@@ -1,8 +1,8 @@
 {
 	"type": "module",
-	"exports": "./index.js",
+	"exports": "./src/index.js",
 	"scripts": {
-		"start": "node ."
+		"start": "node ./src/index.js"
 	},
 	"dependencies": {
 		"discord.js": "^14.7.1",

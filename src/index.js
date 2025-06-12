@@ -1,5 +1,9 @@
+import path from 'node:path'
 import { readdirSync } from 'fs'
 import { Client, GatewayIntentBits } from 'discord.js'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const client = new Client({
   intents: [
@@ -11,13 +15,13 @@ const client = new Client({
 
 client.commands = new Map()
 
-for (const file of readdirSync('commands'))
+for (const file of readdirSync(path.join(__dirname, 'commands')))
   if (file.endsWith('.js')) {
     const command = (await import(`./commands/${file}`)).default
     client.commands.set(command.name, command)
   }
 
-for (const file of readdirSync('events'))
+for (const file of readdirSync(path.join(__dirname, 'events')))
   if (file.endsWith('.js'))
     client.on(
       file.split('.')[0],
@@ -38,6 +42,7 @@ client.login(process.env.TOKEN)
   })
 
 import http from 'node:http';
+import { fileURLToPath } from 'node:url';
 
 // HTTP health checks responder for some hosting platforms
 http

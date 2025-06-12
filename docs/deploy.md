@@ -78,7 +78,7 @@ npm i
 4. Run the bot, specifying **`TOKEN`** and **`DATABASE`** environment variables
 
 ```sh
-TOKEN=<bot_token> DATABASE=<mongodb_uri> node . # dot is required
+TOKEN=<bot_token> DATABASE=<mongodb_uri> node ./src/index.js # dot is required
 ```
 
 Replace `<bot_token>` with the actual bot token, and `<mongodb_uri>` with the
