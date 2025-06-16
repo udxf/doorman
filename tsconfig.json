@@ -1,0 +1,53 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig.json",
+	"compilerOptions": {
+		// For gradual migration
+		// TODO: remove after completing migration process
+		"allowJs": true,
+		"checkJs": false,
+
+		// Type Checking
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+
+		// Modules
+		"allowArbitraryExtensions": false,
+		"allowImportingTsExtensions": false,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"resolveJsonModule": true,
+		"rootDir": "./src", // Where TS source code is located
+		"types": ["node"],
+
+		// Emit
+		"newLine": "lf",
+		"outDir": "./dist", // Where compiled JS files go
+		"removeComments": false,
+		"sourceMap": true,
+
+		// Interop Constraints
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+
+		// Language and Environment
+		"lib": ["ES2022"],
+		"target": "ES2022", // Output modern JS syntax
+		"useDefineForClassFields": true,
+
+		// Completeness
+		"skipLibCheck": true // Skip type checking for built-in TS stuff
+	},
+	// "include": ["src/**/*.ts"], // TODO: uncomment after migration
+	"exclude": ["node_modules", "dist"]
+}
