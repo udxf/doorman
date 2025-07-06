@@ -75,10 +75,16 @@ Note that you have to execute next steps from within the **doorman** folder.
 npm i
 ```
 
-4. Run the bot, specifying **`TOKEN`** and **`DATABASE`** environment variables
+4. Compile the bot to JavaScript
 
 ```sh
-TOKEN=<bot_token> DATABASE=<mongodb_uri> node ./src/index.js # dot is required
+npm run build
+```
+
+5. Run the bot, specifying **`TOKEN`** and **`DATABASE`** environment variables
+
+```sh
+TOKEN=<bot_token> DATABASE=<mongodb_uri> npm run start
 ```
 
 Replace `<bot_token>` with the actual bot token, and `<mongodb_uri>` with the
