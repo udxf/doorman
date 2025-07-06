@@ -1,10 +1,7 @@
 import { hubs, history, session } from '../util/database.js'
+import type { Client, Guild } from 'discord.js'
 
-/**
- * @param {import('discord.js').Guild} guild Deleted guild instance
- * @this import('discord.js').Client
- */
-export default async function(guild) {
+export default async function(this: Client<true>, guild: Guild): Promise<void> {
   hubs.delete({ guild: guild.id })
   history.delete({ guild: guild.id })
   session.delete({ guild: guild.id })

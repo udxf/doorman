@@ -1,40 +1,44 @@
+import { hubs } from '../util/database.js'
 import {
-  ApplicationCommandOptionType as OptionType,
-  ChannelType,
-  Collection,
   REST,
   InteractionContextType,
-  MessageFlags
+  ApplicationCommandOptionType as OptionType,
+  ChannelType,
+  MessageFlags,
+  PermissionFlagsBits,
+  type VoiceRegion,
+  type ChatInputCommandInteraction,
+  type PermissionsBitField,
+  type BaseGuildVoiceChannel,
+  type CategoryChannel,
+  type VideoQualityMode,
 } from 'discord.js'
-import { hubs } from '../util/database.js'
 
 const rest = new REST()
-rest.setToken(process.env.TOKEN)
+rest.setToken(process.env.TOKEN!)
 
-async function getRegions() {
-  let regions = await rest.get('/voice/regions')
+async function getRegions(): Promise<{ name: string, value: string }[]> {
+  const regionsList = await rest.get('/voice/regions') as VoiceRegion[]
 
-  regions = regions.map(i => ({
+  return regionsList.map(i => ({
     name: i.name,
     value: i.id
   }))
-
-  return regions
 }
 
-function lackingPermissions(permissions) {
-  const targets = [
-    [0x00000400n, 'View Channels'],
-    [0x00100000n, 'Connect'],
-    [0x00000010n, 'Manage Channels'],
-    [0x10000000n, 'Manage Roles'],
-    [0x01000000n, 'Move Members'],
-    [0x00000800n, 'Send Messages']
+function lackingPermissions(permissions: PermissionsBitField) {
+  const targets: [bigint, string][] = [
+    [PermissionFlagsBits.ViewChannel, 'View Channels'],
+    [PermissionFlagsBits.Connect, 'Connect'],
+    [PermissionFlagsBits.ManageChannels, 'Manage Channels'],
+    [PermissionFlagsBits.ManageRoles, 'Manage Roles'],
+    [PermissionFlagsBits.MoveMembers, 'Move Members'],
+    [PermissionFlagsBits.SendMessages, 'Send Messages']
   ]
 
   const lacks = targets
-    .filter(([flag, name]) => !permissions.has(flag))
-    .map(([flag, name]) => `**${name}**`)
+    .filter(([flag]) => !permissions.has(flag))
+    .map(([, name]) => `**${name}**`)
 
   return [{
     color: 0xed4245,
@@ -43,7 +47,6 @@ function lackingPermissions(permissions) {
   }];
 }
 
-/** @type {import('discord.js').ApplicationCommand} */
 export default {
   name: 'setup',
   description: 'Setup a hub channel',
@@ -128,44 +131,45 @@ export default {
     }
   ],
 
-  /** @this {import('discord.js').Interaction} */
   async execute(
-    channel,
-    name,
-    nsfw,
-    bitrate,
-    userLimit,
-    rateLimitPerUser,
-    parent,
-    rtcRegion,
-    videoQualityMode
-  ) {
+    this: ChatInputCommandInteraction<'cached'>,
+    channel?: BaseGuildVoiceChannel,
+    name?: string,
+    nsfw?: boolean,
+    bitrate?: number,
+    userLimit?: number,
+    rateLimitPerUser?: number,
+    parent?: CategoryChannel,
+    rtcRegion?: string,
+    videoQualityMode?: VideoQualityMode
+  ): Promise<void> {
+    const me = await this.guild.members.fetchMe()
     const permissions = channel?.permissionsFor(this.applicationId)
-      || this.guild.members.me.permissions
+      || me.permissions
 
-    if (!permissions.has(0x11100c10n)) {
-      return this.reply({
+    if (!permissions!.has(0x11100c10n)) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
-        embeds: lackingPermissions(permissions)
+        embeds: lackingPermissions(permissions!)
       })
+
+      return
     }
 
     // TODO: forbid using this command on temporary voice channels
 
     if (!channel) {
-      channel = await this.guild.channels.create({
-        type: 2, // voice
+      channel = await this.guild.channels.create<ChannelType.GuildVoice>({
+        type: ChannelType.GuildVoice,
         name: 'Voice Hub',
         permissionOverwrites: [
           {
-            // disable SEND_MESSAGES (0x800) permission for @everyone
-            id: this.guild.id,
-            deny: 0x800n
+            id: this.guild.roles.everyone,
+            deny: PermissionFlagsBits.SendMessages
           },
           {
-            // enable MOVE_MEMBERS (0x1000000) permission for the bot
             id: this.applicationId,
-            allow: 0x1000000n
+            allow: PermissionFlagsBits.MoveMembers
           }
         ]
       })
@@ -176,19 +180,19 @@ export default {
       )
     }
 
-    await hubs.set(channel.id, Object.fromEntries(
-      new Collection([
-        ['guild', this.guildId],
-        ['defaults.name', name],
-        ['defaults.bitrate', bitrate && bitrate * 1000],
-        ['defaults.nsfw', nsfw],
-        ['defaults.parent', parent?.id],
-        ['defaults.rateLimitPerUser', rateLimitPerUser],
-        ['defaults.rtcRegion', rtcRegion == 'automatic' ? null : rtcRegion],
-        ['defaults.userLimit', userLimit],
-        ['defaults.videoQualityMode', videoQualityMode]
-      ]).filter(i => i !== undefined)
-    ))
+    await hubs.set(channel.id, {
+      guild: this.guild.id,
+      defaults: {
+        ...(name && { name }),
+        ...(bitrate && { bitrate: bitrate * 1000 }),
+        ...(nsfw && { nsfw }),
+        ...(parent && { parent: parent.id }),
+        ...(rateLimitPerUser && { rateLimitPerUser }),
+        ...(rtcRegion && { rtcRegion: rtcRegion !== 'automatic' ? rtcRegion : null }),
+        ...(userLimit && { userLimit }),
+        ...(videoQualityMode && { videoQualityMode }),
+      }
+    })
 
     this.reply({
       flags: MessageFlags.Ephemeral,

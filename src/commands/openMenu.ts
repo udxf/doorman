@@ -1,8 +1,8 @@
 import open from './open.js'
+import { ApplicationCommandType } from 'discord.js'
 
-/** @type {import('discord.js').ApplicationCommand} */
 export default {
-  type: 2,
+  type: ApplicationCommandType.User,
   name: 'Open for User',
   execute: open.execute
 }

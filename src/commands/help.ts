@@ -1,14 +1,18 @@
-import { InteractionContextType, MessageFlags } from 'discord.js'
+import {
+  InteractionContextType,
+  MessageFlags,
+  type ChatInputCommandInteraction,
+} from 'discord.js'
 
-/** @type {import('discord.js').CommandInteraction} */
 export default {
   name: 'help',
   description: 'Get helpful information about the bot',
   contexts: [InteractionContextType.Guild],
 
-  async execute() {
+  async execute(this: ChatInputCommandInteraction<'cached'>): Promise<void> {
+
     const commands = this.client.application.commands.cache
-    const command = (name) => `</${name}:${commands.find(c => c.name == name)?.id || 0}>`
+    const command = (name: string) => `</${name}:${commands.find(c => c.name == name)?.id || 0}>`
 
     const adminHelp = [
       {
@@ -50,7 +54,7 @@ export default {
       }
     ]
 
-    const localHelp = this.memberPermissions.has(0x8n) ? adminHelp : userHelp
+    const localHelp = this.memberPermissions?.has(0x8n) ? adminHelp : userHelp
 
     this.reply({
       flags: MessageFlags.Ephemeral,

@@ -1,7 +1,13 @@
-import { roleMention, userMention, EmbedBuilder, InteractionContextType, MessageFlags } from 'discord.js'
 import { history, session } from '../util/database.js'
+import {
+  roleMention,
+  userMention,
+  InteractionContextType,
+  MessageFlags,
+  EmbedBuilder,
+  type ChatInputCommandInteraction,
+} from 'discord.js'
 
-/** @type {import('discord.js').ApplicationCommand} */
 export default {
   name: 'revise',
   description: 'See who is allowed to join channel',
@@ -9,21 +15,22 @@ export default {
 
   // TODO: maybe add an option to check someone else's channel
 
-  /**
-   * @this {import('discord.js').Interaction}
-   * @param {import('discord.js').BaseGuildVoiceChannel} [channel=this.member.voice.channel]
-   */
-  async execute(channel = this.member.voice.channel) {
+  async execute(this: ChatInputCommandInteraction<'cached'>): Promise<void> {
 
-    const { hub, host } = Object(await session.get(channel?.id))
+    const channel = this.member.voice.channel
 
-    if (!channel || !host)
-      return this.reply({
+    const { hub, host } = Object(channel && await session.get(channel.id))
+
+    if (!channel || !host) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
         content: 'Please join a temporary voice channel before using this command.'
       })
 
-    const { permissions = [] } = await history.get({ hub, user: host }) || {}
+      return
+    }
+
+    const { permissions = [] } = Object(await history.get({ hub, user: host }))
 
     const isPublic = channel
       .permissionsFor(this.guild.roles.everyone)
@@ -57,4 +64,3 @@ export default {
     })
   }
 }
-

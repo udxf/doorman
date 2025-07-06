@@ -1,52 +1,77 @@
 import { history, session } from '../util/database.js'
-import { Role, InteractionContextType, MessageFlags } from 'discord.js'
+import {
+  InteractionContextType,
+  ApplicationCommandOptionType as OptionType,
+  MessageFlags,
+  PermissionFlagsBits,
+  Role,
+  type ChatInputCommandInteraction,
+  type GuildMember,
+} from 'discord.js'
 
-/** @type {import('discord.js').ApplicationCommand} */
 export default {
   name: 'close',
   description: 'Prevent others from joining the channel',
   contexts: [InteractionContextType.Guild],
 
   options: [{
-    type: 9, // mentionable
+    type: OptionType.Mentionable,
     name: 'for',
     description: "User or role you don't want to be able to join the channel"
   }],
 
-  /** @this {import('discord.js').Interaction} */
-  async execute(target = this.guild.roles.everyone) {
+  async execute(
+    this: ChatInputCommandInteraction<'cached'>,
+    target: GuildMember | Role = this.guild.roles.everyone
+  ): Promise<void> {
 
-    if (target == this.member)
-      return this.reply({
+    // Make sure target is not the invoker
+    if (target === this.member) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
         content: `You can't affect your own permissions.`
       })
 
-    if (target == this.guild.members.me)
-      return this.reply({
+      return
+    }
+    // Make sure target is not the bot
+    else if (target === this.guild.members.me) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
         content: `You can't restrict me. It's required for me to have access to all personal voice channels to function properly.`
       })
 
-    if (target.permissions?.has(0x8n))
-      return this.reply({
+      return
+    }
+    // Make sure target is not administrator
+    else if (target.permissions.has(PermissionFlagsBits.Administrator)) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
         content: `${target} has admin rights. Administrators always have full access to all channels.`
       })
 
-    const channel = this.member.voice.channel
-    const { hub, host } = Object(await session.get(channel?.id))
+      return
+    }
 
-    if (!channel || host != this.user.id)
-      return this.reply({
+    const voiceState = await this.guild.voiceStates.fetch(this.user.id)
+    const channel = voiceState.channel
+    const { hub, host } = Object(channel && await session.get(channel.id))
+
+    if (!channel || host !== this.user.id) {
+      this.reply({
         flags: MessageFlags.Ephemeral,
         content: 'You have to be in your own voice channel in order to use this command.'
       })
 
+      return
+    }
+
     history.set({ hub, user: this.user.id }, {
-      [`permissions.${target.id}`]: {
-        type: target instanceof Role ? 0 : 1,
-        deny: 0x400
+      permissions: {
+        [target.id]: {
+          type: target instanceof Role ? 0 : 1,
+          deny: 0x400n
+        }
       }
     })
 

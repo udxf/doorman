@@ -1,10 +1,10 @@
 import { hubs, session, history } from '../util/database.js'
+import type { Client, DMChannel, NonThreadGuildBasedChannel } from 'discord.js'
 
-/**
- * @param {import('discord.js').NonThreadGuildBasedChannel} channel Deleted channel instance
- * @this import('discord.js').Client
- */
-export default async function(channel) {
+export default async function(
+  this: Client<true>,
+  channel: DMChannel | NonThreadGuildBasedChannel
+): Promise<void> {
   hubs.delete(channel.id)
   session.delete(channel.id)
   history.delete({ hub: channel.id })

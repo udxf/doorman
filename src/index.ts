@@ -1,11 +1,13 @@
 import path from 'node:path'
-import { readdirSync } from 'fs'
+import http from 'node:http'
+import { readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { Client, GatewayIntentBits } from 'discord.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const client = new Client({
+const client: any = new Client({
   intents: [
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.Guilds
@@ -41,10 +43,7 @@ client.login(process.env.TOKEN)
     client.application.commands.set([...client.commands.values()], process.env.GUILD)
   })
 
-import http from 'node:http';
-import { fileURLToPath } from 'node:url';
-
 // HTTP health checks responder for some hosting platforms
 http
-  .createServer((req, res) => res.end())
+  .createServer((_, res) => res.end())
   .listen(process.env.PORT)
