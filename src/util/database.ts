@@ -82,12 +82,7 @@ if (!process.env.DATABASE) {
   throw Error("No MongoDB connection string provided.\nPlease specify 'DATABASE' environment variable.")
 }
 
-const client = new MongoClient(process.env.DATABASE, {
-  retryWrites: true,
-  writeConcern: {
-    w: 'majority'
-  }
-})
+const client = new MongoClient(process.env.DATABASE)
 
 client.connect()
 
