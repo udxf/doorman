@@ -9,9 +9,11 @@ import {
 } from 'discord.js'
 
 export default {
-  name: 'revise',
-  description: 'See who is allowed to join channel',
-  contexts: [InteractionContextType.Guild],
+  data: {
+    name: 'revise',
+    description: 'See who is allowed to join channel',
+    contexts: [InteractionContextType.Guild],
+  },
 
   // TODO: maybe add an option to check someone else's channel
 

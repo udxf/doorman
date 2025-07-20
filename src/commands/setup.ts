@@ -48,88 +48,90 @@ function lackingPermissions(permissions: PermissionsBitField) {
 }
 
 export default {
-  name: 'setup',
-  description: 'Setup a hub channel',
-  defaultMemberPermissions: 0x8n,
-  contexts: [InteractionContextType.Guild],
-  options: [
-    {
-      type: OptionType.Channel,
-      name: 'channel',
-      description: 'Voice channel to setup as hub',
-      channelTypes: [ChannelType.GuildVoice]
-    },
+  data: {
+    name: 'setup',
+    description: 'Setup a hub channel',
+    defaultMemberPermissions: 0x8n,
+    contexts: [InteractionContextType.Guild],
+    options: [
+      {
+        type: OptionType.Channel,
+        name: 'channel',
+        description: 'Voice channel to setup as hub',
+        channelTypes: [ChannelType.GuildVoice]
+      },
 
-    // Options for default configuration of temporary channels
-    // See https://discord.com/developers/docs/resources/channel for reference
+      // Options for default configuration of temporary channels
+      // See https://discord.com/developers/docs/resources/channel for reference
 
-    {
-      type: OptionType.String,
-      name: 'name',
-      description: 'Default name for temporary channels',
-      maxLength: 100,
-      minLength: 1
-    },
-    {
-      type: OptionType.Boolean,
-      name: 'nsfw',
-      description: 'Are temporary channels NSFW by default?'
-    },
-    {
-      type: OptionType.Integer,
-      name: 'bitrate',
-      description: 'Default bitrate (in kbps) for temporary channels',
-      maxValue: 384,
-      minValue: 8
-    },
-    {
-      type: OptionType.Integer,
-      name: 'user-limit',
-      description: 'Default user limit for temporary channels',
-      maxValue: 99,
-      minValue: 0
-    },
-    {
-      type: OptionType.Integer,
-      name: 'slowmode',
-      description: 'Default message threshold (in seconds) for temporary channels',
-      maxValue: 21600,
-      minValue: 0
-    },
-    {
-      type: OptionType.Channel,
-      name: 'parent',
-      description: 'Category to create channels at',
-      channelTypes: [ChannelType.GuildCategory]
-    },
-    {
-      type: OptionType.String,
-      name: 'region',
-      description: 'Default connection region for temporary channels',
-      choices: [
-        {
-          name: 'Automatic',
-          value: 'automatic'
-        },
-        ...await getRegions()
-      ]
-    },
-    {
-      type: OptionType.String,
-      name: 'video-quality',
-      description: 'Default channel video quality mode',
-      choices: [
-        {
-          name: 'Auto',
-          value: '1'
-        },
-        {
-          name: 'Full',
-          value: '2'
-        }
-      ]
-    }
-  ],
+      {
+        type: OptionType.String,
+        name: 'name',
+        description: 'Default name for temporary channels',
+        maxLength: 100,
+        minLength: 1
+      },
+      {
+        type: OptionType.Boolean,
+        name: 'nsfw',
+        description: 'Are temporary channels NSFW by default?'
+      },
+      {
+        type: OptionType.Integer,
+        name: 'bitrate',
+        description: 'Default bitrate (in kbps) for temporary channels',
+        maxValue: 384,
+        minValue: 8
+      },
+      {
+        type: OptionType.Integer,
+        name: 'user-limit',
+        description: 'Default user limit for temporary channels',
+        maxValue: 99,
+        minValue: 0
+      },
+      {
+        type: OptionType.Integer,
+        name: 'slowmode',
+        description: 'Default message threshold (in seconds) for temporary channels',
+        maxValue: 21600,
+        minValue: 0
+      },
+      {
+        type: OptionType.Channel,
+        name: 'parent',
+        description: 'Category to create channels at',
+        channelTypes: [ChannelType.GuildCategory]
+      },
+      {
+        type: OptionType.String,
+        name: 'region',
+        description: 'Default connection region for temporary channels',
+        choices: [
+          {
+            name: 'Automatic',
+            value: 'automatic'
+          },
+          ...await getRegions()
+        ]
+      },
+      {
+        type: OptionType.String,
+        name: 'video-quality',
+        description: 'Default channel video quality mode',
+        choices: [
+          {
+            name: 'Auto',
+            value: '1'
+          },
+          {
+            name: 'Full',
+            value: '2'
+          }
+        ]
+      }
+    ],
+  },
 
   async execute(
     this: ChatInputCommandInteraction<'cached'>,

@@ -12,7 +12,7 @@ export default async function(
   if (!command) return
 
   let execute = command.execute
-  let options = command.options
+  let options = command.data.options
 
   // handle context menus
   if (interaction.commandType == 2) options = [{ name: 'user' }]

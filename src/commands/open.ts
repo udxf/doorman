@@ -10,15 +10,16 @@ import {
 } from 'discord.js'
 
 export default {
-  name: 'open',
-  description: 'Allow others to join the channel',
-  contexts: [InteractionContextType.Guild],
-
-  options: [{
-    type: OptionType.Mentionable,
-    name: 'for',
-    description: "User or role you want to be able to join the channel"
-  }],
+  data: {
+    name: 'open',
+    description: 'Allow others to join the channel',
+    contexts: [InteractionContextType.Guild],
+    options: [{
+      type: OptionType.Mentionable,
+      name: 'for',
+      description: "User or role you want to be able to join the channel"
+    }],
+  },
 
   async execute(
     this: ChatInputCommandInteraction<'cached'>,

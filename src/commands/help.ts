@@ -5,9 +5,11 @@ import {
 } from 'discord.js'
 
 export default {
-  name: 'help',
-  description: 'Get helpful information about the bot',
-  contexts: [InteractionContextType.Guild],
+  data: {
+    name: 'help',
+    description: 'Get helpful information about the bot',
+    contexts: [InteractionContextType.Guild],
+  },
 
   async execute(this: ChatInputCommandInteraction<'cached'>): Promise<void> {
 

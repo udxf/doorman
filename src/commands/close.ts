@@ -10,15 +10,17 @@ import {
 } from 'discord.js'
 
 export default {
-  name: 'close',
-  description: 'Prevent others from joining the channel',
-  contexts: [InteractionContextType.Guild],
+  data: {
+    name: 'close',
+    description: 'Prevent others from joining the channel',
+    contexts: [InteractionContextType.Guild],
 
-  options: [{
-    type: OptionType.Mentionable,
-    name: 'for',
-    description: "User or role you don't want to be able to join the channel"
-  }],
+    options: [{
+      type: OptionType.Mentionable,
+      name: 'for',
+      description: "User or role you don't want to be able to join the channel"
+    }],
+  },
 
   async execute(
     this: ChatInputCommandInteraction<'cached'>,

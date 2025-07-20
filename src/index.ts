@@ -2,7 +2,12 @@ import path from 'node:path'
 import http from 'node:http'
 import { readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { Client, GatewayIntentBits } from 'discord.js'
+import {
+  Client,
+  Collection,
+  GatewayIntentBits,
+  type ApplicationCommandData
+} from 'discord.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,12 +20,12 @@ const client: any = new Client({
   shards: 'auto'
 })
 
-client.commands = new Map()
+client.commands = new Collection()
 
 for (const file of readdirSync(path.join(__dirname, 'commands')))
   if (file.endsWith('.js')) {
     const command = (await import(`./commands/${file}`)).default
-    client.commands.set(command.name, command)
+    client.commands.set(command.data.name, command)
   }
 
 for (const file of readdirSync(path.join(__dirname, 'events')))
@@ -40,7 +45,7 @@ client.login(process.env.TOKEN)
      *
      * Remove it from environment while not debugging.
      */
-    client.application.commands.set([...client.commands.values()], process.env.GUILD)
+    client.application.commands.set(client.commands.map((command: { data: ApplicationCommandData }) => command.data), process.env.GUILD)
   })
 
 // HTTP health checks responder for some hosting platforms
