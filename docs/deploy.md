@@ -90,6 +90,10 @@ TOKEN=<bot_token> DATABASE=<mongodb_uri> npm run start
 Replace `<bot_token>` with the actual bot token, and `<mongodb_uri>` with the
 MongoDB connection string.
 
+> [!NOTE]
+> If there are no Doorman's slash commands in autosuggestions, try
+> reloading Discord with `Ctrl + R`.
+
 ## Deploy onto a hosting
 
 Process of deploying may vary depending on a hosting provider, so you should
