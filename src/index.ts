@@ -6,7 +6,6 @@ import {
   Client,
   Collection,
   GatewayIntentBits,
-  type ApplicationCommandData
 } from 'discord.js'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,17 +35,6 @@ for (const file of readdirSync(path.join(__dirname, 'events')))
     )
 
 client.login(process.env.TOKEN)
-  .then(async () => {
-    await client.application.fetch()
-
-    /**
-     * Environment variable GUILD specifies id of a guild to update commands for.
-     * Guild-specific commands are updated instantly (unlike global commands), so testing goes faster.
-     *
-     * Remove it from environment while not debugging.
-     */
-    client.application.commands.set(client.commands.map((command: { data: ApplicationCommandData }) => command.data), process.env.GUILD)
-  })
 
 // HTTP health checks responder for some hosting platforms
 http
